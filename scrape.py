@@ -1,7 +1,5 @@
-from datetime import datetime
 import logging
 from bs4 import BeautifulSoup
-from csvprocess import csvprocess
 from fetch import fetch
 
 
@@ -54,16 +52,17 @@ class scrape:
 
         return details
 
-    def scraping(self):
+    def scraping(self, x=0, limit=-1):
         soup1 = self.__bsobjget(self.__url+'/sitemaps/google_news', 'xml')
-        urls = soup1.find_all('url', limit=10)
+        if limit == -1:
+            urls = soup1.find_all('url')
+        else:
+            urls = soup1.find_all('url', limit=limit)
         # print(urls)
         details = []
         for i, url in enumerate(urls):
             if url == None:
                 continue
-            logging.info('Processing article id: %i', i)
-            details.append(self.__processurlsoup(url, i))
-        fname = datetime.now().strftime('%Y%m%d')+"_verge"
-        cobj = csvprocess(fname)
-        cobj.listdicttocsv(details)
+            logging.info('Processing article id: %i', i+x)
+            details.append(self.__processurlsoup(url, i+x))
+        return details
