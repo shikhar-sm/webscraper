@@ -59,7 +59,10 @@ class database:
         return res
 
     def deduplicate(self):
-        query = '''SELECT  FROM data'''
+        query = '''DELETE from data
+        WHERE  id not in (SELECT max(id) FROM data GROUP BY (url))'''
+        self.__cursor.execute(query)
+        self.__connection.commit()
 
     def close(self):
         self.__cursor.close()
