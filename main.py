@@ -26,6 +26,7 @@ if __name__ == "__main__":
     details = scrapeobj.scraping(i, 10)
 
     dobj.insert(details)
+    dobj.deduplicate()
 
     cobj = csvprocess(fname)
     cobj.listdicttocsv(details)
